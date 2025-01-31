@@ -1,4 +1,4 @@
-package com.open_foundation.Galamsey_Analysis;
+package com.openfoundation.galamseyanalysis;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

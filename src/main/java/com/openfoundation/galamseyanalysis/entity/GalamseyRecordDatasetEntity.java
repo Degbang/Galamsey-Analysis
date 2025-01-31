@@ -1,7 +1,10 @@
-package com.open_foundation.Galamsey_Analysis.entity;
+package com.openfoundation.galamseyanalysis.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
@@ -15,10 +18,11 @@ import java.util.UUID;
 public class GalamseyRecordDatasetEntity {
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2") // Generates unique UUIDs
     @Column(name = "id", nullable = false)
     private UUID id;
+
     private String city;
-    private String  region;
+    private String region;
     private Integer numberOfGalamseySites;
 }
