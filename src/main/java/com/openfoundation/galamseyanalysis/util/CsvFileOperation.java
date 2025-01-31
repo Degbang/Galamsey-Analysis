@@ -21,35 +21,33 @@ import java.util.List;
  */
 @Slf4j
 public class CsvFileOperation {
-    private static final String DEFAULT_DIRECTORY = "data";
+    String DEFAULT_OUTPUT_DIRECTORY = "data";
+
+    String DEFAULT_DIRECTORY = "src/main/resources/";
 
     /**
-     * Reads a CSV file and converts it into a list of {@link GalamseyRecordDataset} objects.
-     *
-     * @param filePath The path to the CSV file.
+     * Reads a CSV file from the resources/static folder.
+     * @param fileName The name of the CSV file.
      * @return A list of Galamsey records. Returns an empty list if the file is not found.
      */
-    public static List<GalamseyRecordDataset> readCsvFile(String filePath) {
-        try {
-            ClassPathResource resource = new ClassPathResource(filePath);
-            Reader reader = new InputStreamReader(resource.getInputStream());
+    public static List<GalamseyRecordDataset> readCsvFile(String fileName, String defaultDirectory) {
+        Path filePath = Path.of(defaultDirectory, fileName);
 
-            List<GalamseyRecordDataset> data = new CsvToBeanBuilder<GalamseyRecordDataset>(reader)
+        try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+            return new CsvToBeanBuilder<GalamseyRecordDataset>(reader)
                     .withType(GalamseyRecordDataset.class)
                     .build()
                     .parse();
-
-            return data;
-        } catch (Exception e) {
-            log.error("Error loading file from classpath: {}, Error: {}", filePath, e.getMessage());
+        } catch (IOException e) {
+            log.error("Error loading file from path: {}, Error: {}", filePath, e.getMessage());
         }
         return new ArrayList<>();
     }
 
-    public static File writeCsvFile(List<GalamseyRecordDatasetEntity> galamseyRecordDatasetEntities, String fileName) {
+    public static File writeCsvFile(List<GalamseyRecordDatasetEntity> galamseyRecordDatasetEntities, String fileName , String defaultFilePath) {
 
         try {
-            Path directoryPath = Path.of(DEFAULT_DIRECTORY);
+            Path directoryPath = Path.of(defaultFilePath);
             if (!Files.exists(directoryPath)) {
                 Files.createDirectories(directoryPath);
             }

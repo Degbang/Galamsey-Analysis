@@ -27,31 +27,13 @@ public class GalamsayRecordLoaderServiceImpl implements GalamseyRecordLoaderServ
     @Value("${csv.filePath.fileName}")
     private String fileName;
 
-    /**
-     * Validates a city. checks if a city is null/empty or contains "unknown" or "invalid"
-     * If false, the entire row is considered invalid.
-     *
-     * @param city The Galamsey record to validate.
-     */
-    private static boolean isValidCity(String city) {
-        var lowerCaseCity = city.toLowerCase();
-        var invalidWords = List.of("unknown", "invalid");
-        return !lowerCaseCity.isEmpty() && !invalidWords.contains(lowerCaseCity.trim());
-    }
+    @Value("${csv.writer.filePath}")
+    private String writerFilePath;
 
-    /**
-     * Ensures all records in a group have consistent Galamsey site counts.
-     *
-     * @param sitesInGroup List of Galamsey records.
-     * @return true if all records have the same site count, false otherwise.
-     */
-    private static boolean hasConsistentGalamseyNumber(List<GalamseyRecordDataset> sitesInGroup) {
-        long uniqueGalamseyNumbers = sitesInGroup.stream()
-                .map(GalamseyRecordDataset::getNumberOfGalamseySites)
-                .distinct()
-                .count();
-        return uniqueGalamseyNumbers == 1;
-    }
+    @Value("${csv.reader.filePath}")
+    private String readFilePath;
+
+
 
     /**
      * Reads, validates, and saves only cleaned Galamsey records into the database and csv file.
@@ -75,7 +57,7 @@ public class GalamsayRecordLoaderServiceImpl implements GalamseyRecordLoaderServ
         galamseyRecordRepository.saveAll(galamseyRecordDatasetEntities);
         log.info("{} records successfully inserted into the database.", galamseyRecordDatasetEntities.size());
         log.info("Saving Analyzed File");
-        CsvFileOperation.writeCsvFile(galamseyRecordDatasetEntities, fileName);
+        CsvFileOperation.writeCsvFile(galamseyRecordDatasetEntities, fileName, writerFilePath);
     }
 
     /**
@@ -86,7 +68,7 @@ public class GalamsayRecordLoaderServiceImpl implements GalamseyRecordLoaderServ
      * @return List of valid Galamsey records
      */
     private List<GalamseyRecordDataset> getRecords() {
-        List<GalamseyRecordDataset> csvRecords = CsvFileOperation.readCsvFile(readerFilePath);
+        List<GalamseyRecordDataset> csvRecords = CsvFileOperation.readCsvFile(readerFilePath, readFilePath);
 
         if (csvRecords == null || csvRecords.isEmpty()) {
             return new ArrayList<>();
@@ -130,10 +112,35 @@ public class GalamsayRecordLoaderServiceImpl implements GalamseyRecordLoaderServ
             return false;
         }
         try {
-            Integer.parseInt(value);
-            return true;
+            int number = Integer.parseInt(value);
+            return number > 0;
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+    /**
+     * Validates a city. checks if a city is null/empty or contains "unknown" or "invalid"
+     * If false, the entire row is considered invalid.
+     *
+     * @param city The Galamsey record to validate.
+     */
+    private static boolean isValidCity(String city) {
+        var lowerCaseCity = city.toLowerCase();
+        var invalidWords = List.of("unknown", "invalid");
+        return !lowerCaseCity.isEmpty() && !invalidWords.contains(lowerCaseCity.trim());
+    }
+
+    /**
+     * Ensures all records in a group have consistent Galamsey site counts.
+     *
+     * @param sitesInGroup List of Galamsey records.
+     * @return true if all records have the same site count, false otherwise.
+     */
+    private static boolean hasConsistentGalamseyNumber(List<GalamseyRecordDataset> sitesInGroup) {
+        long uniqueGalamseyNumbers = sitesInGroup.stream()
+                .map(GalamseyRecordDataset::getNumberOfGalamseySites)
+                .distinct()
+                .count();
+        return uniqueGalamseyNumbers == 1;
     }
 }

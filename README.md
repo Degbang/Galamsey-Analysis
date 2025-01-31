@@ -55,23 +55,54 @@ For Windows
 - Start PostgreSQL (if not already running): net start postgresql/ Alternatively, start it via pgAdmin.
 - Log into PostgreSQL: psql -U postgres
 - Create the Galamsey database: CREATE DATABASE galamsey_db;
-- https://res.cloudinary.com/dnsu7es0c/image/upload/v1738327670/Screenshot_2025-01-31_at_12.39.08_PM_nzzybp.png
+- ![Alt text](https://res.cloudinary.com/dnsu7es0c/image/upload/v1738327670/Screenshot_2025-01-31_at_12.39.08_PM_nzzybp.png)
 
-
-### **4.API Endpoints (Swagger Documentation)**
+---
+### **Validations**
+- To ensure data integrity, the application validates the records before inserting them into the database. 
+Invalid records are completely discarded to maintain accurate analysis. 
+Below are the validation rules applied:
+  - Region Validation
+    - The region must be one of Ghana’s 16 officially recognized regions.
+      If the region is invalid, the entire row is discarded.
+    
+  - City Validation
+    - The city cannot be empty or contain values like "unknown" or "invalid".
+     If invalid, the entire row is removed.
+  
+  - Number of Galamsey Sites Validation.
+    - The number must be a positive integer (greater than 0).
+      If missing, negative, or not a number, the row is discarded.
+  
+  - Consistency Check
+    - All records within the same region-city group must have the same Galamsey site count.
+  If inconsistent, the group is discarded.
+---
+### **API Endpoints (Swagger Documentation)**
 - Once the application is running, Swagger UI will be available at: http://localhost:8080/swagger-ui/index.html. 
 - This allows you to explore and test the API.
-- https://res.cloudinary.com/dnsu7es0c/image/upload/v1738327669/Screenshot_2025-01-31_at_12.39.00_PM_gznyqy.png
+- ![Alt text](https://res.cloudinary.com/dnsu7es0c/image/upload/v1738327669/Screenshot_2025-01-31_at_12.39.00_PM_gznyqy.png)
 
-
+---
 ### **Export Analyzed Data to CSV**
 - Once the application has processed the Galamsey data, the analyzed results will be stored in the data directory inside the project.
 
+---
 ### **Running the application locally**
 There are several ways to run a Spring Boot application on your local machine. 
 One way is to execute the main method in the com.open_foundation.GalamseyAnalysis.Application; class from your IDE.
 
-
+---
+### **Running Tests in Spring Boot**
+This project uses JUnit 5 and Mockito for unit testing. The tests ensure that the Galamsey Analysis service functions correctly.
+- To execute all tests, use one of the following methods:
+    - Using Gradle
+      - ./gradlew test
+    - For Windows:
+      - gradlew test
+    - Using IntelliJ / Eclipse
+      - Right-click on the test folder and select "Run Tests"
+      - Or, navigate to a test class and click the green Run button
 
 
 
