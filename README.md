@@ -4,7 +4,7 @@ This is a **Spring Boot** application designed to analyze illegal small-scale mi
 
 ## **Features**
 Reads Galamsey data from a CSV file
--  Validates records (region, city, and site count)
+- Validates records (region, city, and site count)
 - Removes invalid records from the dataset before saving
 - Stores cleaned data into a PostgreSQL database
 - Exposes REST API endpoints to interact with the data
@@ -55,13 +55,14 @@ For Windows
 - Start PostgreSQL (if not already running): net start postgresql/ Alternatively, start it via pgAdmin.
 - Log into PostgreSQL: psql -U postgres
 - Create the Galamsey database: CREATE DATABASE galamsey_db;
+- https://res.cloudinary.com/dnsu7es0c/image/upload/v1738327670/Screenshot_2025-01-31_at_12.39.08_PM_nzzybp.png
 
-- ![Screenshot 2025-01-31 at 12.20.40 PM.png](..%2F..%2F..%2F..%2Fvar%2Ffolders%2Fz7%2F9xzw3l914g5bdw4gkp1vgzjr0000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_yhclbY%2FScreenshot%202025-01-31%20at%2012.20.40%E2%80%AFPM.png)
+
 ### **4.API Endpoints (Swagger Documentation)**
 - Once the application is running, Swagger UI will be available at: http://localhost:8080/swagger-ui/index.html. 
 - This allows you to explore and test the API.
+- https://res.cloudinary.com/dnsu7es0c/image/upload/v1738327669/Screenshot_2025-01-31_at_12.39.00_PM_gznyqy.png
 
-- ![Screenshot 2025-01-31 at 12.19.13 PM.png](..%2F..%2F..%2F..%2Fvar%2Ffolders%2Fz7%2F9xzw3l914g5bdw4gkp1vgzjr0000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_xn0CM1%2FScreenshot%202025-01-31%20at%2012.19.13%E2%80%AFPM.png)
 
 ### **Export Analyzed Data to CSV**
 - Once the application has processed the Galamsey data, the analyzed results will be stored in the data directory inside the project.
